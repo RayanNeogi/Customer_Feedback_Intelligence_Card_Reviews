@@ -1,0 +1,13 @@
+feedback_text,predicted_sentiment,predicted_category,priority,keywords
+My card payment was declined even though I had sufficient balance,neutral,Payment Issue,High,"sufficient balance, card payment, payment was declined, balance, card, payment, declined, sufficient"
+The transaction failed multiple times during checkout,negative,Payment Issue,High,"transaction failed multiple, failed multiple times, times during checkout, transaction failed, failed multiple, multiple times, checkout, transaction, failed, multiple"
+Payment processing is very fast and reliable,neutral,Payment Issue,High,"Payment processing, fast and reliable, Payment, reliable, processing, fast"
+Rewards points were not credited after my purchase,positive,Other,Low,"Rewards points, Rewards, purchase, points, credited"
+I received bonus rewards instantly,positive,Other,Low,"bonus rewards instantly, received bonus rewards, rewards instantly, received bonus, bonus rewards, instantly, received, bonus, rewards"
+There is an unauthorized transaction on my card,neutral,Payment Issue,High,"unauthorized transaction, card, unauthorized, transaction"
+Fraud detection worked quickly and blocked the transaction,negative,Payment Issue,High,"Fraud detection worked, detection worked quickly, Fraud detection, blocked the transaction, detection worked, worked quickly, quickly and blocked, Fraud, transaction, detection"
+The mobile app crashes whenever I open it,neutral,Performance Issue,Low,"mobile app crashes, mobile app, app crashes, mobile, app, crashes, open"
+The mobile app is easy to use and responsive,positive,Other,Low,"mobile app, app is easy, responsive, mobile, app, easy"
+Customer support resolved my issue quickly,positive,Other,Low,"Customer support resolved, Customer support, issue quickly, support resolved, resolved my issue, Customer, quickly, support, resolved, issue"
+Customer support was unhelpful and rude,negative,Other,Medium,"Customer support, unhelpful and rude, support was unhelpful, Customer, rude, support, unhelpful"
+I love the new features in the app,positive,Feature Request,Low,"app, love, features"

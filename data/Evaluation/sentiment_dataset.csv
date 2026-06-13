@@ -1,0 +1,21 @@
+text,expected_sentiment
+I love the new app interface,positive
+The payment process is smooth and easy,positive
+Customer support resolved my issue quickly,positive
+The rewards program is fantastic,positive
+Excellent experience using the card,positive
+My payment failed again,negative
+The app keeps crashing,negative
+Customer support was unhelpful,negative
+Login issues are very frustrating,negative
+Terrible experience with transactions,negative
+The application was updated yesterday,neutral
+I logged in successfully today,neutral
+The card statement is available,neutral
+A notification was received,neutral
+The account details were updated,neutral
+The checkout experience was excellent,positive
+Refund process is taking too long,negative
+The dashboard has been redesigned,neutral
+I am happy with the customer service,positive
+The transaction could not be completed,negative

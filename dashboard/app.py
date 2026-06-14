@@ -1,14 +1,28 @@
 import sys
 from pathlib import Path
 
+from dashboard.pages.keyword_intelligence import keyword_intelligence
+
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
 if str(ROOT_DIR) not in sys.path:
     sys.path.append(str(ROOT_DIR))
 import streamlit as st
 import pandas as pd
+from pages.sentiment_analytics import (
+    sentiment_analytics
+)
+from components.ai_copilot import (
+    ai_copilot
+)
 from components.risk_engine import (
     calculate_risk
+)
+from pages.category_analytics import (
+    category_analytics
+)
+from pages.overview import (
+    overview
 )
 from components.alert_severity import (
     alert_severity
@@ -16,7 +30,9 @@ from components.alert_severity import (
 from components.customer_voice import (
     customer_voice
 )
-
+from pages.sentiment_analytics import (
+    sentiment_analytics
+)
 from components.root_cause_analysis import (
     root_cause_analysis
 )
@@ -73,7 +89,13 @@ st.set_page_config(
     page_icon="📊",
     layout="wide"
 )
-
+st.markdown("""
+    <style>
+    [data-testid="stSidebarNav"] {
+    display: none;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 # =====================================================
 # SYSTEM CONTROLS
 # =====================================================
@@ -210,7 +232,20 @@ filtered_df = df[
         .isin(selected_priority)
     )
 ]
+# =====================================================
+# PAGE NAVIGATION
+# =====================================================
 
+page = st.sidebar.radio(
+    "Navigation",
+    [
+        "Dashboard",
+        "Overview",
+        "Sentiment Analytics",
+        "Category Analytics",
+        "Keyword Intelligence"
+    ]
+)
 if search_text:
 
     filtered_df = filtered_df[
@@ -222,6 +257,34 @@ if search_text:
             na=False
         )
     ]
+if page == "Sentiment Analytics":
+
+    sentiment_analytics(
+        filtered_df
+    )
+
+    st.stop()
+if page == "Category Analytics":
+
+    category_analytics(
+        filtered_df
+    )
+
+    st.stop()
+if page == "Keyword Intelligence":
+
+    keyword_intelligence(
+        filtered_df
+    )
+
+    st.stop()
+if page == "Overview":
+
+    overview(
+        filtered_df
+    )
+
+    st.stop()
 
 # =====================================================
 # KPI DASHBOARD
@@ -439,6 +502,12 @@ generate_insights(
     filtered_df
 )
 st.markdown("---")
+
+ai_copilot(
+    filtered_df
+)
+st.markdown("---")
+
 customer_voice(
     filtered_df
 )

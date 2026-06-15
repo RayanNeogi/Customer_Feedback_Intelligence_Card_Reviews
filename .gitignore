@@ -1,11 +1,17 @@
 __pycache__/
 *.pyc
 
-*.pkl
 *.joblib
+# ignore most pickle files
+*.pkl
 
+# but keep production models
+!models/
+!models/keywords-count-vectorizer.pkl
+!models/keywords-feature-names.pkl
+!models/keywords-tfidf-model.pkl
 *.db
-
+!database/feedback.db
 data/Raw/
 notebooks/
 

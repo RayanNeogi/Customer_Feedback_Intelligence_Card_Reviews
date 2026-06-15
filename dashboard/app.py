@@ -1,8 +1,7 @@
 import sys
 from pathlib import Path
 
-from dashboard.pages.keyword_intelligence import keyword_intelligence
-
+from pages.keyword_intelligence import keyword_intelligence
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
 if str(ROOT_DIR) not in sys.path:

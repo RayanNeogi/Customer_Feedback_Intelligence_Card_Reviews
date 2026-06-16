@@ -4,7 +4,7 @@ __pycache__/
 *.joblib
 # ignore most pickle files
 *.pkl
-
+.env
 # but keep production models
 !models/
 !models/keywords-count-vectorizer.pkl

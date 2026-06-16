@@ -14,6 +14,9 @@ from pages.sentiment_analytics import (
 from components.ai_copilot import (
     ai_copilot
 )
+from components.ai_copilot import (
+    ai_copilot
+)
 from components.risk_engine import (
     calculate_risk
 )
@@ -88,13 +91,36 @@ st.set_page_config(
     page_icon="📊",
     layout="wide"
 )
+
 st.markdown("""
-    <style>
-    [data-testid="stSidebarNav"] {
+<style>
+
+[data-testid="stSidebarNav"] {
     display: none;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+}
+
+.block-container {
+    padding-top: 1rem;
+}
+
+div[data-testid="metric-container"] {
+    background-color: #1E293B;
+    border: 1px solid #334155;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+h1 {
+    font-weight: 700;
+}
+
+h2 {
+    border-bottom: 1px solid #334155;
+    padding-bottom: 8px;
+}
+
+</style>
+""", unsafe_allow_html=True)
 # =====================================================
 # SYSTEM CONTROLS
 # =====================================================
@@ -135,28 +161,15 @@ st.markdown("---")
 # HEADER
 # =====================================================
 
-st.title(
-    "📊 Customer Feedback Intelligence Platform"
-)
+st.markdown("""
+# Customer Feedback Intelligence Platform
 
-st.markdown(
-    """
-Enterprise-grade NLP-powered customer feedback analytics platform.
+Enterprise Analytics Platform for Customer Experience Monitoring
 
-### Features
-
-- Sentiment Analysis
-- Issue Categorization
-- Priority Monitoring
-- Executive Alert Engine
-- Keyword Intelligence
-- Trend Analytics
-- AI Recommendations
-- SQLite Database Integration
-- Interactive Dashboard
-"""
-)
-
+Monitor sentiment, operational risks, recurring issues,
+customer trends and executive performance metrics from a
+single intelligence dashboard.
+""")
 st.markdown("---")
 
 # =====================================================
@@ -289,7 +302,7 @@ if page == "Overview":
 # KPI DASHBOARD
 # =====================================================
 
-st.header("📈 Executive KPIs")
+st.header("Executive KPIs")
 
 render_kpis(filtered_df)
 
@@ -310,7 +323,7 @@ st.markdown("---")
 # =====================================================
 
 st.header(
-    "🏢 Business Health Summary"
+    "Business Health Summary"
 )
 
 total_feedback = len(
@@ -384,7 +397,7 @@ st.markdown("---")
 # =====================================================
 
 st.header(
-    "📊 Analytics Dashboard"
+    "Analytics Dashboard"
 )
 
 col1, col2 = st.columns(2)
@@ -424,7 +437,7 @@ st.markdown("---")
 # =====================================================
 
 st.header(
-    "🔑 Keyword Intelligence"
+    "Keyword Intelligence"
 )
 
 if "keywords" in filtered_df.columns:
@@ -478,7 +491,7 @@ st.markdown("---")
 # =====================================================
 
 st.header(
-    "📄 Feedback Explorer"
+    "Feedback Explorer"
 )
 
 st.dataframe(
@@ -497,19 +510,18 @@ generate_recommendations(
 )
 st.markdown("---")
 
-generate_insights(
-    filtered_df
-)
+
+generate_insights(filtered_df)
+
 st.markdown("---")
 
-ai_copilot(
-    filtered_df
-)
+ai_copilot(filtered_df)
+
 st.markdown("---")
 
-customer_voice(
-    filtered_df
-)
+customer_voice(filtered_df)
+st.markdown("---")
+
 
 st.markdown("---")
 
@@ -537,7 +549,7 @@ st.markdown("---")
 # =====================================================
 
 st.header(
-    "⬇️ Download Center"
+    " Download Center"
 )
 
 # CSV DOWNLOAD
@@ -558,7 +570,7 @@ st.markdown("")
 # PDF GENERATION
 
 if st.button(
-    "📄 Generate Executive PDF Report"
+    "Generate Executive PDF Report"
 ):
 
     pdf_file = generate_pdf_report(
@@ -583,19 +595,11 @@ st.markdown("---")
 # FOOTER
 # =====================================================
 
-st.caption(
-    """
+st.caption("""
 Customer Feedback Intelligence Platform
 
-Phase 7:
-Database Integrated Executive Intelligence Platform
+Version 1.0
 
-Features:
-✓ SQLite Database
-✓ NLP Analytics
-✓ Alert Engine
-✓ Trend Monitoring
-✓ AI Recommendations
-✓ Interactive Dashboard
-"""
-)
+Built using Streamlit, SQLite, NLP Pipelines,
+Machine Learning and Executive Analytics.
+""")

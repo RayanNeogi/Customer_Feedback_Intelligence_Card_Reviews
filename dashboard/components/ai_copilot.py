@@ -1,278 +1,140 @@
 import streamlit as st
 import pandas as pd
 
+from src.llm.gemini_service import ask_ai
 
 def ai_copilot(df):
 
-    st.header(
-        "🤖 AI Executive Copilot"
+    st.header("AI Executive Copilot")
+
+    st.write(
+        "Ask questions about customer feedback, risks, trends, recommendations or customer sentiment."
     )
 
-    question = st.text_input(
-        "Ask a question about customer feedback"
+    question = st.text_area(
+        "Executive Question",
+        height=120,
+        placeholder="Example: Why are payment complaints increasing?"
     )
 
-    if not question:
+    if st.button("Ask AI"):
 
-        return
+        if question.strip() == "":
 
-    question = question.lower()
+            st.warning(
+                "Please enter a question."
+            )
 
-    # ==================================================
-    # Most Negative Category
-    # ==================================================
+            return
 
-    if (
-        "negative" in question
-        and "category" in question
-    ):
+        with st.spinner(
+            "Generating executive insights..."
+        ):
 
-        negative_df = df[
-            df["sentiment"]
-            .astype(str)
-            .str.lower()
-            == "negative"
-        ]
+            total_feedback = len(df)
 
-        if len(negative_df) > 0:
+            negative_feedback = len(
+                df[
+                    df["sentiment"]
+                    .astype(str)
+                    .str.lower()
+                    == "negative"
+                ]
+            )
+
+            positive_feedback = len(
+                df[
+                    df["sentiment"]
+                    .astype(str)
+                    .str.lower()
+                    == "positive"
+                ]
+            )
+
+            high_priority = len(
+                df[
+                    df["priority"]
+                    .astype(str)
+                    .str.lower()
+                    == "high"
+                ]
+            )
 
             top_category = (
-                negative_df["category"]
-                .value_counts()
-                .idxmax()
+                df["category"]
+                .mode()[0]
+                if not df.empty
+                else "N/A"
             )
 
-            st.success(
-                f"""
-The category with the most
-negative feedback is:
-
-{top_category}
-"""
-            )
-
-        return
-
-    # ==================================================
-    # Top Category
-    # ==================================================
-
-    if "top category" in question:
-
-        top_category = (
-            df["category"]
-            .value_counts()
-            .idxmax()
-        )
-
-        st.success(
-            f"""
-Top Feedback Category:
-
-{top_category}
-"""
-        )
-
-        return
-
-    # ==================================================
-    # High Priority
-    # ==================================================
-
-    if "high priority" in question:
-
-        count = len(
-            df[
-                df["priority"]
-                .astype(str)
-                .str.lower()
-                == "high"
-            ]
-        )
-
-        st.success(
-            f"""
-There are
-
-{count}
-
-high-priority feedback records.
-"""
-        )
-
-        return
-
-    # ==================================================
-    # Summary
-    # ==================================================
-
-    if "summary" in question:
-
-        total = len(df)
-
-        negative = len(
-            df[
+            sentiment_distribution = (
                 df["sentiment"]
-                .astype(str)
-                .str.lower()
-                == "negative"
-            ]
-        )
+                .value_counts()
+                .to_dict()
+            )
 
-        top_category = (
-            df["category"]
-            .value_counts()
-            .idxmax()
-        )
+            category_distribution = (
+                df["category"]
+                .value_counts()
+                .to_dict()
+            )
 
-        st.success(
-            f"""
-Executive Summary
+            keyword_text = ""
 
-Total Feedback:
-{total}
+            if "keywords" in df.columns:
 
-Negative Feedback:
-{negative}
+                keywords = []
 
-Top Category:
-{top_category}
-"""
-        )
+                for row in df["keywords"].dropna():
 
-        return
-
-    # ==================================================
-    # Root Cause Analysis
-    # ==================================================
-
-    if "root cause" in question:
-
-        if "keywords" in df.columns:
-
-            all_keywords = []
-
-            for row in df[
-                "keywords"
-            ].dropna():
-
-                words = [
-                    word.strip()
-                    for word in str(row).split(",")
-                ]
-
-                all_keywords.extend(
-                    words
-                )
-
-            if len(all_keywords) > 0:
+                    keywords.extend(
+                        [
+                            word.strip()
+                            for word in str(row).split(",")
+                        ]
+                    )
 
                 top_keywords = (
-                    pd.Series(
-                        all_keywords
-                    )
+                    pd.Series(keywords)
                     .value_counts()
-                    .head(5)
-                    .index
-                    .tolist()
+                    .head(15)
+                    .to_dict()
                 )
 
-                output = (
-                    "Top Root Causes:\n\n"
+                keyword_text = str(
+                    top_keywords
                 )
 
-                for keyword in top_keywords:
+            context = f"""
+Total Feedback: {total_feedback}
 
-                    output += (
-                        f"• {keyword}\n"
-                    )
+Negative Feedback: {negative_feedback}
 
-                st.success(
-                    output
-                )
+Positive Feedback: {positive_feedback}
 
-        return
+High Priority Feedback: {high_priority}
 
-    # ==================================================
-    # Recommendations
-    # ==================================================
+Top Category: {top_category}
 
-    if (
-        "recommend" in question
-        or
-        "recommendation" in question
-    ):
+Sentiment Distribution:
+{sentiment_distribution}
 
-        negative_df = df[
-            df["sentiment"]
-            .astype(str)
-            .str.lower()
-            == "negative"
-        ]
+Category Distribution:
+{category_distribution}
 
-        if len(negative_df) > 0:
+Top Keywords:
+{keyword_text}
+"""
 
-            top_category = (
-                negative_df["category"]
-                .value_counts()
-                .idxmax()
+            answer = ask_ai(
+                question,
+                context
             )
 
-            st.success(
-                f"""
-Recommended Action
+        st.markdown("---")
 
-Focus on improving:
-
-{top_category}
-
-This category generates
-the highest volume of
-negative customer feedback.
-"""
-            )
-
-        return
-
-    # ==================================================
-    # Sentiment Breakdown
-    # ==================================================
-
-    if "sentiment" in question:
-
-        sentiment_counts = (
-            df["sentiment"]
-            .value_counts()
+        st.subheader(
+            "Executive Insight"
         )
 
-        st.success(
-            sentiment_counts.to_string()
-        )
-
-        return
-
-    # ==================================================
-    # Default
-    # ==================================================
-
-    st.info(
-        """
-I don't know how to answer that yet.
-
-Try:
-
-• summary
-
-• root cause
-
-• recommendation
-
-• top category
-
-• high priority
-
-• which category has the most negative feedback
-
-• sentiment
-"""
-    )
+        st.write(answer)
